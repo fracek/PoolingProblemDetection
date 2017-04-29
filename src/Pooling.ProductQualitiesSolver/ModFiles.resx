@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, ...</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, ...</value>
+  </resheader>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="data">
+      <xsd:complexType>
+	<xsd:sequence>
+          <xsd:element name="value" type="xsd:string" minOccurs="0"                     msdata:Ordinal="2" />
+	</xsd:sequence>
+	<xsd:attribute name="name" type="xsd:string" />
+	<xsd:attribute name="type" type="xsd:string" />
+	<xsd:attribute name="mimetype" type="xsd:string" />
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <data name="FindQualU">
+    <value><![CDATA[
+set I;
+set J;
+set K;
+var c{i in I, k in K} >= 0;
+var pu{j in J, k in K} >= 0;
+var pl{j in J, k in K} >= 0;
+var A{k in K, t in K, j in J} binary;
+
+var Y{i in I, t in K, j in J} >= 0;
+
+param DTU{i in I, j in J, t in K} default 0.0;
+param DTL{i in I, j in J, t in K} default 0.0;
+param CON{i in I, j in J} default 0.0;
+
+minimize tot: sum{i in I, k in K} c[i,k] + sum{j in J, k in K} pu[j,k] + sum{j in J, k in K} pl[j,k];
+
+s.t.
+diffsu {i in I, j in J, k in K}: CON[i,j] * (c[i,k] - pu[j,k]) = CON[i,j] * DTU[i,j,k];
+
+solve;
+
+# print in a format we can read back in F#
+printf "<?xml version=""1.0"" encoding=""utf-8""?>\n";
+printf "<FsPickler version=""0.9.6.0"" type=""System.Tuple`3[Microsoft.FSharp.Collections.FSharpList`1";
+printf "[Microsoft.FSharp.Collections.FSharpList`1[System.Double]],Microsoft.FSharp.Collections.FSharpList`1";
+printf "[Microsoft.FSharp.Collections.FSharpList`1[System.Double]],Microsoft.FSharp.Collections.FSharpList`1";
+printf "[Microsoft.FSharp.Collections.FSharpList`1[System.Double]]]"">\n";
+printf "  <value>\n";
+
+printf "    <Item1 flags=""sequence"">\n";
+for {i in I} {
+    printf "      <elem flags=""sequence"">\n";
+    for {k in K} {
+        printf "        <elem>%2.2f</elem>\n", c[i,k];
+    }
+    printf "      </elem>\n";
+}
+printf "    </Item1>\n";
+
+printf "    <Item2 flags=""sequence"">\n";
+for {j in J} {
+    printf "      <elem flags=""sequence"">\n";
+    for {k in K} {
+        printf "        <elem>%2.2f</elem>", pu[j,k];
+    }
+    printf "      </elem>\n";
+}
+printf "    </Item2>\n";
+
+printf "    <Item3 flags=""sequence"">\n";
+for {j in J} {
+    printf "      <elem flags=""sequence"">\n";
+    for {k in K} {
+        printf "        <elem>%2.2f</elem>\n", pl[j,k];
+    }
+    printf "      </elem>\n";
+}
+printf "    </Item3>\n";
+printf "  </value>\n";
+printf "</FsPickler>";
+end;
+    ]]></value>
+  </data>
+  <data name="FindQualL">
+    <value><![CDATA[
+set I;
+set J;
+set K;
+var c{i in I, k in K} >= 0;
+var pu{j in J, k in K} >= 0;
+var pl{j in J, k in K} >= 0;
+var A{k in K, t in K, j in J} binary;
+
+var Y{i in I, t in K, j in J} >= 0;
+
+param DTU{i in I, j in J, t in K} default 0.0;
+param DTL{i in I, j in J, t in K} default 0.0;
+param CON{i in I, j in J} default 0.0;
+
+minimize tot: sum{i in I, k in K} c[i,k] + sum{j in J, k in K} pu[j,k] + sum{j in J, k in K} pl[j,k];
+
+s.t.
+diffsl {i in I, j in J, k in K}: CON[i,j] * (c[i,k] - pl[j,k]) = CON[i,j] * DTL[i,j,k];
+
+solve;
+
+# print in a format we can read back in F#
+printf "<?xml version=""1.0"" encoding=""utf-8""?>\n";
+printf "<FsPickler version=""0.9.6.0"" type=""System.Tuple`3[Microsoft.FSharp.Collections.FSharpList`1";
+printf "[Microsoft.FSharp.Collections.FSharpList`1[System.Double]],Microsoft.FSharp.Collections.FSharpList`1";
+printf "[Microsoft.FSharp.Collections.FSharpList`1[System.Double]],Microsoft.FSharp.Collections.FSharpList`1";
+printf "[Microsoft.FSharp.Collections.FSharpList`1[System.Double]]]"">\n";
+printf "  <value>\n";
+
+printf "    <Item1 flags=""sequence"">\n";
+for {i in I} {
+    printf "      <elem flags=""sequence"">\n";
+    for {k in K} {
+        printf "        <elem>%2.2f</elem>\n", c[i,k];
+    }
+    printf "      </elem>\n";
+}
+printf "    </Item1>\n";
+
+printf "    <Item2 flags=""sequence"">\n";
+for {j in J} {
+    printf "      <elem flags=""sequence"">\n";
+    for {k in K} {
+        printf "        <elem>%2.2f</elem>", pu[j,k];
+    }
+    printf "      </elem>\n";
+}
+printf "    </Item2>\n";
+
+printf "    <Item3 flags=""sequence"">\n";
+for {j in J} {
+    printf "      <elem flags=""sequence"">\n";
+    for {k in K} {
+        printf "        <elem>%2.2f</elem>\n", pl[j,k];
+    }
+    printf "      </elem>\n";
+}
+printf "    </Item3>\n";
+printf "  </value>\n";
+printf "</FsPickler>";
+end;
+    ]]></value>
+  </data>
+  <data name="FindQual">
+    <value><![CDATA[
+set I;
+set J;
+set K;
+var c{i in I, k in K} >= 0;
+var pu{j in J, k in K} >= 0;
+var pl{j in J, k in K} >= 0;
+var A{k in K, t in K, j in J} binary;
+
+var Y{i in I, t in K, j in J} >= 0;
+
+param DTU{i in I, j in J, t in K} default 0.0;
+param DTL{i in I, j in J, t in K} default 0.0;
+param CON{i in I, j in J} default 0.0;
+
+minimize tot: sum{i in I, k in K} c[i,k] + sum{j in J, k in K} pu[j,k] + sum{j in J, k in K} pl[j,k];
+
+s.t.
+diffsu {i in I, j in J, k in K}: CON[i,j] * (c[i,k] - pu[j,k]) = CON[i,j] * DTU[i,j,k];
+diffsl {i in I, j in J, k in K}: CON[i,j] * (c[i,k] - pl[j,k]) = CON[i,j] * DTL[i,j,k];
+
+solve;
+
+# print in a format we can read back in F#
+printf "<?xml version=""1.0"" encoding=""utf-8""?>\n";
+printf "<FsPickler version=""0.9.6.0"" type=""System.Tuple`3[Microsoft.FSharp.Collections.FSharpList`1";
+printf "[Microsoft.FSharp.Collections.FSharpList`1[System.Double]],Microsoft.FSharp.Collections.FSharpList`1";
+printf "[Microsoft.FSharp.Collections.FSharpList`1[System.Double]],Microsoft.FSharp.Collections.FSharpList`1";
+printf "[Microsoft.FSharp.Collections.FSharpList`1[System.Double]]]"">\n";
+printf "  <value>\n";
+
+printf "    <Item1 flags=""sequence"">\n";
+for {i in I} {
+    printf "      <elem flags=""sequence"">\n";
+    for {k in K} {
+        printf "        <elem>%2.2f</elem>\n", c[i,k];
+    }
+    printf "      </elem>\n";
+}
+printf "    </Item1>\n";
+
+printf "    <Item2 flags=""sequence"">\n";
+for {j in J} {
+    printf "      <elem flags=""sequence"">\n";
+    for {k in K} {
+        printf "        <elem>%2.2f</elem>", pu[j,k];
+    }
+    printf "      </elem>\n";
+}
+printf "    </Item2>\n";
+
+printf "    <Item3 flags=""sequence"">\n";
+for {j in J} {
+    printf "      <elem flags=""sequence"">\n";
+    for {k in K} {
+        printf "        <elem>%2.2f</elem>\n", pl[j,k];
+    }
+    printf "      </elem>\n";
+}
+printf "    </Item3>\n";
+printf "  </value>\n";
+printf "</FsPickler>";
+end;
+    ]]></value>
+  </data>
+
+</root>
